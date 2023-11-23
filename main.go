@@ -8,9 +8,11 @@ import (
 	"golang/structures"
 	"os"
 	"sync"
+	"time"
 )
 
 func main() {
+	startingtime := time.Now()
 	if len(os.Args) != 2 {
 		fmt.Println("Usage: go run main.go file.txt")
 		return
@@ -24,7 +26,7 @@ func main() {
 	}
 	defer file.Close()
 
-	const chunkSize = 2000
+	const chunkSize = 1000
 	scanner := bufio.NewScanner(file)
 	resultChan := make(chan structures.Summary)
 	var wg sync.WaitGroup
@@ -58,4 +60,9 @@ func main() {
 
 	fmt.Printf("Lines: %d\nWords: %d\nVowels: %d\nPunctuations: %d\n",
 		finalResult.LineCount, finalResult.WordsCount, finalResult.VowelsCount, finalResult.PunctuationCount)
+
+	endtime := time.Now()
+	totaltime := endtime.Sub(startingtime)
+	fmt.Printf("execution time:%v", totaltime)
+
 }
