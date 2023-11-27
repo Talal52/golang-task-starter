@@ -1,4 +1,3 @@
-// main.go
 package main
 
 import (
@@ -9,16 +8,22 @@ import (
 	"os"
 	"sync"
 	"time"
+
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	startingtime := time.Now()
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: go run main.go file.txt")
-		return
-	}
+var rootCmd = &cobra.Command{
+	Use:   "file-analyzer",
+	Short: "Analyzes a text file and provides statistics",
+	Args:  cobra.ExactArgs(2),
+	Run:   analyzeFile,
+}
 
-	fileName := os.Args[1]
+func analyzeFile(cmd *cobra.Command, args []string) {
+	startingTime := time.Now()
+
+	fileName := args[0]
+
 	file, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
@@ -26,7 +31,7 @@ func main() {
 	}
 	defer file.Close()
 
-	const chunkSize = 1000
+	const chunkSize = 3000
 	scanner := bufio.NewScanner(file)
 	resultChan := make(chan structures.Summary)
 	var wg sync.WaitGroup
@@ -61,8 +66,14 @@ func main() {
 	fmt.Printf("Lines: %d\nWords: %d\nVowels: %d\nPunctuations: %d\n",
 		finalResult.LineCount, finalResult.WordsCount, finalResult.VowelsCount, finalResult.PunctuationCount)
 
-	endtime := time.Now()
-	totaltime := endtime.Sub(startingtime)
-	fmt.Printf("execution time:%v", totaltime)
+	endTime := time.Now()
+	totalTime := endTime.Sub(startingTime)
+	fmt.Printf("Execution time: %v\n", totalTime)
+}
 
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }

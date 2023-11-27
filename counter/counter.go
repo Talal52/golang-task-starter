@@ -1,6 +1,8 @@
 package counter
 
-import "golang/structures"
+import (
+	"golang/structures"
+)
 
 func Counts(data string) structures.Summary {
 	result := structures.Summary{}
@@ -17,6 +19,7 @@ func Counts(data string) structures.Summary {
 	}
 	return result
 }
+
 func SummarizeResults(resultChan <-chan structures.Summary) structures.Summary {
 	finalResult := structures.Summary{}
 	for result := range resultChan {
