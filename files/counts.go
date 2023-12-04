@@ -1,10 +1,11 @@
-package counter
+package files
 
 import (
 	"golang/structures"
 )
 
 func Counts(data string) structures.Summary {
+	// fmt.Println("processing data:", data)
 	result := structures.Summary{}
 	for _, char := range data {
 		if char == '.' {
@@ -18,15 +19,4 @@ func Counts(data string) structures.Summary {
 		}
 	}
 	return result
-}
-
-func SummarizeResults(resultChan <-chan structures.Summary) structures.Summary {
-	finalResult := structures.Summary{}
-	for result := range resultChan {
-		finalResult.LineCount += result.LineCount
-		finalResult.WordsCount += result.WordsCount
-		finalResult.VowelsCount += result.VowelsCount
-		finalResult.PunctuationCount += result.PunctuationCount
-	}
-	return finalResult
 }
