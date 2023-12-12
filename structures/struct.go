@@ -1,8 +1,5 @@
 package structures
 
-type Summary struct {
-	LineCount        int
-	WordsCount       int
-	VowelsCount      int
-	PunctuationCount int
+type Counter struct {
+	Words, Vowels, Punctuations, Lines int
 }
